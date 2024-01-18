@@ -1,0 +1,18 @@
+p, ROLE_SYSTEM, ALL_ROOT, read, allow
+p, ROLE_ADMIN, UserMenu, read, allow
+p, ROLE_ADMIN, AdminMenu, read, allow
+p, ROLE_ADMIN, AdminSubMenu_deny, read, deny
+p, ROLE_USER, UserSubMenu_allow, read, allow
+
+g, user, ROLE_USER
+g, admin, ROLE_USER
+g, admin, ROLE_ADMIN
+g, system, ROLE_SYSTEM
+
+g2, UserSubMenu_allow, UserMenu
+g2, UserSubMenu_deny, UserMenu
+g2, AdminSubMenu_allow, AdminMenu
+g2, AdminSubMenu_deny, AdminMenu
+g2, , SystemMenu
+
+
