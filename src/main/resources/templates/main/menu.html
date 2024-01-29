@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Jcasbin-Menu-Permission</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <!-- Custom style -->
+    <style>
+        .card-header, .non-collapse-item {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: 0;
+            background-color: rgba(0,0,0,.03);
+            border-bottom: 1px solid rgba(0,0,0,.125);
+            cursor: pointer;
+        }
+        .non-collapse-item p {
+            margin-bottom: 0;
+            text-align: center;
+        }
+        .card-body p {
+            padding-left: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="main" class="container-fluid">
+    <div id="main_nav" class="d-inline-block">
+        <!-- Collapse menu -->
+        <div id="accordion">
+            <!-- collapsible items -->
+            <div th:each="menu, menuStat: ${menus}" th:if="${menu.subMenus.size() != 0 && menu.subMenus != null}" class="card">
+                <div class="card-header">
+                    <h4 class="mb-0">
+                        <button class="btn btn-link" type="button" data-toggle="collapse" th:data-target="| #collapse${menuStat.index} |">
+                            <span th:text="${menu.name}">Menu 1</span>
+                        </button>
+                    </h4>
+                </div>
+
+                <div th:id="|collapse${menuStat.index}|" class="collapse" data-parent="#accordion">
+                    <div class="card-body">
+                        <p th:each="subMenu:${menu.subMenus}" th:src="${subMenu.url}" th:text="${subMenu.name}">Submenu 1</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Uncollapsed items -->
+            <div th:each="menu:${menus}" th:if="${menu.subMenus.size() == 0}" class="non-collapse-item">
+                <p th:text="${menu.name}" th:src="${menu.url}">Menu 2</p>
+            </div>
+        </div>
+        <div class="logout-button-container">
+            <button id="logoutButton" class="btn btn-danger">log out</button>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS, Popper.js, and jQuery -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var clickableItems = document.querySelectorAll('[src]');
+        clickableItems.forEach(function(item) {
+            item.addEventListener('click', function() {
+                var url = this.getAttribute('src');
+                if (url) {
+                    window.location.href = url;
+                }
+            });
+        });
+        var logoutButton = document.getElementById('logoutButton');
+        logoutButton.addEventListener('click', function() {
+            sessionStorage.clear();
+            localStorage.clear();
+            window.location.href = '/casbin';
+        });
+    });
+</script>
+</body>
+</html>
