@@ -1,0 +1,3 @@
+test:
+  menu:
+    filePath: examples/casbin/policy.csv
