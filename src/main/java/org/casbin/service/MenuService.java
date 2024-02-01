@@ -115,11 +115,11 @@ public class MenuService {
         if (menu.getName().equals(menuName)) {
             return true;
         }
-//        for (MenuEntity subMenu : menu.getSubMenus()) {
-//            if (menuMatches(subMenu, menuName)) {
-//                return true;
-//            }
-//        }
+        for (MenuEntity subMenu : menu.getSubMenus()) {
+            if (menuMatches(subMenu, menuName)) {
+                return true;
+            }
+        }
         return false;
     }
 
