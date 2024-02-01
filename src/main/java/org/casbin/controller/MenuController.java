@@ -14,7 +14,7 @@
 
 package org.casbin.controller;
 
-import jakarta.servlet.http.HttpSession;
+import javax.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.casbin.entity.MenuEntity;
 import org.casbin.service.MenuService;
