@@ -36,12 +36,18 @@ public class MenuUtil {
                     String childName = values[1].trim();
                     String parentName = values[2].trim();
 
-                    menuMap.putIfAbsent(childName, new MenuEntity(childName));
-                    if (!parentName.isEmpty()) {
+                    // Check whether the name of the submenu is "(NULL)"
+                    if (!"(NULL)".equals(childName)) {
+                        menuMap.putIfAbsent(childName, new MenuEntity(childName));
+                        if (!parentName.isEmpty()) {
+                            menuMap.putIfAbsent(parentName, new MenuEntity(parentName));
+                            MenuEntity childMenu = menuMap.get(childName);
+                            MenuEntity parentMenu = menuMap.get(parentName);
+                            parentMenu.addSubMenu(childMenu);
+                        }
+                    } else if (!parentName.isEmpty()) {
+                        // Add only the parent menu, no submenu.
                         menuMap.putIfAbsent(parentName, new MenuEntity(parentName));
-                        MenuEntity childMenu = menuMap.get(childName);
-                        MenuEntity parentMenu = menuMap.get(parentName);
-                        parentMenu.addSubMenu(childMenu);
                     }
                 }
             }
@@ -49,4 +55,3 @@ public class MenuUtil {
         return menuMap;
     }
 }
-

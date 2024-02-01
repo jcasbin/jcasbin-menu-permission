@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
 public class AuthenticationService {
     public boolean authenticate(String username, String password) {
         // Three valid username and password combinations are set here.
-        return ("system".equals(username) && "system".equals(password)) ||
+        return ("root".equals(username) && "root".equals(password)) ||
                 ("admin".equals(username) && "admin".equals(password)) ||
                 ("user".equals(username) && "user".equals(password));
     }
