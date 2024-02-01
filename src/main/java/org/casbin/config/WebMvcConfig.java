@@ -51,15 +51,12 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 // Extract the menu name, assuming it is the last part of the URI.
                 String menuName = requestURI.substring(requestURI.lastIndexOf('/') + 1);
 
-                if(menuService.checkUserAccess(username, "ALL_ROOT")) return true;
-
                 if (username == null) {
                     // The user is not logged in
                     response.sendRedirect(request.getContextPath() + "/denied");
                     return false;
                 }
-
-                if (!menuService.checkUserAccess(username, menuName)) {
+                if (!menuService.checkMenuAccess(username, menuName)) {
                     // Users do not have access to the menu.
                     response.sendRedirect(request.getContextPath() + "/denied");
                     return false;

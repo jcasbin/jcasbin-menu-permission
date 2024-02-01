@@ -28,7 +28,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * The MenuService class handles menu-related business logic, including permission control and menu filtering, using the jCasbin permission library.
@@ -53,12 +52,7 @@ public class MenuService {
             this.menuMap = new HashMap<>();
         }
         this.accessMap = new HashMap<>();
-        // Check if there is ALL_ROOT permission
-        if (checkUserAccess(username, "ALL_ROOT")) {
-            return menuMap.values().stream()
-                    .filter(this::isTopLevelMenu)
-                    .collect(Collectors.toList());
-        }
+
         List<MenuEntity> accessibleMenus = new ArrayList<>();
         for (MenuEntity menu : menuMap.values()) {
             checkAndSetMenuAccess(menu, username);
@@ -102,9 +96,31 @@ public class MenuService {
         return menu.getParents() == null;
     }
 
-    public boolean checkUserAccess(String username, String menuName) {
+    private boolean checkUserAccess(String username, String menuName) {
         // Integrate Casbin to check user access to specific menus
         return enforcer.enforce(username, menuName, "read");
     }
-}
 
+    public boolean checkMenuAccess(String username, String menuName) {
+        List<MenuEntity> accessibleMenus = findAccessibleMenus(username);
+        for (MenuEntity menu : accessibleMenus) {
+            if (menuMatches(menu, menuName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean menuMatches(MenuEntity menu, String menuName) {
+        if (menu.getName().equals(menuName)) {
+            return true;
+        }
+        for (MenuEntity subMenu : menu.getSubMenus()) {
+            if (menuMatches(subMenu, menuName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+}

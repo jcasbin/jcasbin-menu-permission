@@ -19,6 +19,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class TestMenuController {
+    @GetMapping(value = "menu/UserMenu")
+    public String UserMenu(){
+        return "UserMenu/UserMenu";
+    }
     @GetMapping(value = "menu/UserSubMenu_allow")
     public String UserSubMenu_allow(){
         return "UserMenu/UserSubMenu_allow";
@@ -27,6 +31,16 @@ public class TestMenuController {
     @GetMapping(value = "menu/UserSubMenu_deny")
     public String UserSubMenu_deny(){
         return "UserMenu/UserSubMenu_deny";
+    }
+
+    @GetMapping(value = "menu/UserSubSubMenu")
+    public String UserSubMenu_sub(){
+        return "UserMenu/UserSubSubMenu";
+    }
+
+    @GetMapping(value = "menu/AdminMenu")
+    public String AdminMenu(){
+        return "AdminMenu/AdminMenu";
     }
 
     @GetMapping(value = "menu/AdminSubMenu_allow")
@@ -39,9 +53,9 @@ public class TestMenuController {
         return "AdminMenu/AdminSubMenu_deny";
     }
 
-    @GetMapping(value = "menu/SystemMenu")
+    @GetMapping(value = "menu/OtherMenu")
     public String SystemMenu(){
-        return "SystemMenu/SystemMenu";
+        return "OtherMenu/OtherMenu";
     }
 
 }

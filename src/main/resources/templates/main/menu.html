@@ -21,34 +21,59 @@
         .card-body p {
             padding-left: 20px;
         }
+        .submenu-background {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 5px;
+        }
+
     </style>
 </head>
 <body>
 
-<div id="main" class="container-fluid">
-    <div id="main_nav" class="d-inline-block">
-        <!-- Collapse menu -->
-        <div id="accordion">
-            <!-- collapsible items -->
-            <div th:each="menu, menuStat: ${menus}" th:if="${menu.subMenus.size() != 0 && menu.subMenus != null}" class="card">
+<!-- Recursive menu fragment -->
+<div th:fragment="menuFragment(menuList, isTopLevel)">
+    <div th:each="menu, menuStat: ${menuList}">
+        <!-- Items with submenus -->
+        <div th:if="${menu.subMenus.size() != 0 && menu.subMenus != null}">
+            <div th:if="${isTopLevel}" class="card">
                 <div class="card-header">
                     <h4 class="mb-0">
                         <button class="btn btn-link" type="button" data-toggle="collapse" th:data-target="| #collapse${menuStat.index} |">
-                            <span th:text="${menu.name}">Menu 1</span>
+                            <span th:src="${menu.url}" th:text="${menu.name}">Menu Name</span>
                         </button>
                     </h4>
                 </div>
 
                 <div th:id="|collapse${menuStat.index}|" class="collapse" data-parent="#accordion">
                     <div class="card-body">
-                        <p th:each="subMenu:${menu.subMenus}" th:src="${subMenu.url}" th:text="${subMenu.name}">Submenu 1</p>
+                        <div th:replace="this :: menuFragment(${menu.subMenus}, false)"></div>
                     </div>
                 </div>
             </div>
-            <!-- Uncollapsed items -->
-            <div th:each="menu:${menus}" th:if="${menu.subMenus.size() == 0}" class="non-collapse-item">
-                <p th:text="${menu.name}" th:src="${menu.url}">Menu 2</p>
+            <div th:unless="${isTopLevel}" class="submenu-background">
+                <button class="btn btn-link" type="button" data-toggle="collapse" th:data-target="| #collapseSub${menuStat.index} |">
+                    <span th:src="${menu.url}" th:text="${menu.name}">Submenu Name</span>
+                </button>
+                <div th:id="|collapseSub${menuStat.index}|" class="collapse">
+                    <div th:replace="this :: menuFragment(${menu.subMenus}, false)"></div>
+                </div>
             </div>
+        </div>
+
+        <!-- No submenu items -->
+        <div th:if="${menu.subMenus.size() == 0}">
+            <a th:src="${menu.url}" th:text="${menu.name}">Menu Item</a>
+        </div>
+    </div>
+</div>
+
+<div id="main" class="container-fluid">
+    <div id="main_nav" class="d-inline-block">
+        <div id="accordion">
+            <!-- Call the recursive fragment -->
+            <div th:replace="this :: menuFragment(${menus}, true)"></div>
         </div>
         <div class="logout-button-container">
             <button id="logoutButton" class="btn btn-danger">log out</button>
