@@ -1,108 +1,94 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
-    <title>Jcasbin-Menu-Permission</title>
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <!-- Custom style -->
+    <title>Menu with Submenus</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
-        .card-header, .non-collapse-item {
-            padding: 0.75rem 1.25rem;
-            margin-bottom: 0;
-            background-color: rgba(0,0,0,.03);
-            border-bottom: 1px solid rgba(0,0,0,.125);
-            cursor: pointer;
+        .menu-container {
+            max-height: 400px;
+            overflow-y: auto;
         }
-        .non-collapse-item p {
-            margin-bottom: 0;
-            text-align: center;
+        .submenu-container {
+            display: none;
+            position: absolute;
+            left: 100%;
+            top: 0;
+            min-width: 200px;
+            z-index: 10;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
-        .card-body p {
-            padding-left: 20px;
+        .submenu-item .submenu-container {
+            left: 100%;
+            top: 0;
         }
-        .submenu-background {
-            background-color: #f8f9fa;
-            padding: 10px;
-            border-radius: 5px;
-            margin-top: 5px;
+        .menu-item:hover > .submenu-container {
+            display: block;
         }
-
+        .submenu-item:hover > .submenu-container {
+            display: block;
+        }
+        .menu-item {
+            width: 150px;
+        }
     </style>
 </head>
 <body>
 
-<!-- Recursive menu fragment -->
-<div th:fragment="menuFragment(menuList, isTopLevel)">
-    <div th:each="menu, menuStat: ${menuList}">
-        <!-- Items with submenus -->
-        <div th:if="${menu.subMenus.size() != 0 && menu.subMenus != null}">
-            <div th:if="${isTopLevel}" class="card">
-                <div class="card-header">
-                    <h4 class="mb-0">
-                        <button class="btn btn-link" type="button" data-toggle="collapse" th:data-target="| #collapse${menuStat.index} |">
-                            <span th:src="${menu.url}" th:text="${menu.name}">Menu Name</span>
-                        </button>
-                    </h4>
-                </div>
-
-                <div th:id="|collapse${menuStat.index}|" class="collapse" data-parent="#accordion">
-                    <div class="card-body">
-                        <div th:replace="this :: menuFragment(${menu.subMenus}, false)"></div>
+<div class="container mx-auto p-4 flex justify-center items-center min-h-screen">
+    <div class="menu-container bg-white rounded-md shadow-lg">
+        <div th:fragment="menuFragment(menuList, isTopLevel)">
+            <div th:each="menu, menuStat : ${menuList}" class="relative">
+                <div th:if="${menu.subMenus.size() != 0 && menu.subMenus != null}">
+                    <div th:if="${isTopLevel}" class="bg-gray-100 border-b border-gray-200 cursor-pointer hover-effect menu-item">
+                        <h4 class="m-0 p-2 flex justify-between items-center">
+                            <div class="text-gray-800 hover:text-gray-600" th:attr="onclick=|window.location.href='${menu.url}'|" th:text="${menu.name}">Menu Name</div>
+                        </h4>
+                        <div class="submenu-container">
+                            <div class="bg-white submenu-background" th:replace="this :: menuFragment(${menu.subMenus}, false)"></div>
+                        </div>
+                    </div>
+                    <div th:unless="${isTopLevel}" class="submenu-background hover:bg-blue-300 hover-effect submenu-item">
+                        <div class="p-2 text-gray-800 hover:text-gray-600" th:attr="onclick=|window.location.href='${menu.url}'|" th:text="${menu.name}">Submenu Name</div>
+                        <div class="submenu-container">
+                            <div th:replace="this :: menuFragment(${menu.subMenus}, false)"></div>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div th:unless="${isTopLevel}" class="submenu-background">
-                <button class="btn btn-link" type="button" data-toggle="collapse" th:data-target="| #collapseSub${menuStat.index} |">
-                    <span th:src="${menu.url}" th:text="${menu.name}">Submenu Name</span>
-                </button>
-                <div th:id="|collapseSub${menuStat.index}|" class="collapse">
-                    <div th:replace="this :: menuFragment(${menu.subMenus}, false)"></div>
+                <div th:if="${menu.subMenus.size() == 0}">
+                    <a class="block p-2 text-gray-800 hover:text-gray-600 hover-effect menu-item" th:href="${menu.url}" th:text="${menu.name}">Menu Item</a>
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- No submenu items -->
-        <div th:if="${menu.subMenus.size() == 0}">
-            <a th:src="${menu.url}" th:text="${menu.name}">Menu Item</a>
-        </div>
+    <div id="main_nav" class="mt-4">
+        <div th:replace="this :: menuFragment(${menus}, true)"></div>
+        <button id="logoutButton" class="mt-4 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition duration-300 ease-in-out">Log out</button>
     </div>
 </div>
 
-<div id="main" class="container-fluid">
-    <div id="main_nav" class="d-inline-block">
-        <div id="accordion">
-            <!-- Call the recursive fragment -->
-            <div th:replace="this :: menuFragment(${menus}, true)"></div>
-        </div>
-        <div class="logout-button-container">
-            <button id="logoutButton" class="btn btn-danger">log out</button>
-        </div>
-    </div>
-</div>
-
-<!-- Bootstrap JS, Popper.js, and jQuery -->
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        var clickableItems = document.querySelectorAll('[src]');
-        clickableItems.forEach(function(item) {
-            item.addEventListener('click', function() {
-                var url = this.getAttribute('src');
-                if (url) {
-                    window.location.href = url;
-                }
+        document.querySelectorAll('.menu-item, .submenu-item').forEach(function(item) {
+            item.addEventListener('mouseenter', function() {
+                let submenu = this.querySelector('.submenu-container');
+                if(submenu) submenu.classList.remove('hidden');
+            });
+            item.addEventListener('mouseleave', function() {
+                let submenu = this.querySelector('.submenu-container');
+                if(submenu) submenu.classList.add('hidden');
             });
         });
+
         var logoutButton = document.getElementById('logoutButton');
         logoutButton.addEventListener('click', function() {
             sessionStorage.clear();
             localStorage.clear();
-            window.location.href = '/casbin';
+            window.location.href = '/';
         });
     });
 </script>
+
 </body>
 </html>

@@ -2,24 +2,20 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>login</title>
+    <title>Login</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body>
-<div class="panel panel-primary" style="width: 500px; margin: 5% auto;">
-    <div class="panel-heading">login</div>
-    <div class="panel-body">
-        <form action="login" method="post" class="form-horizontal">
-            <div class="input-group input-sm" style="margin-bottom: 10px">
-                <label class="input-group-addon"><i class="glyphicon glyphicon-user"></i></label>
-                <input type="text" class="form-control" name="username" placeholder="username">
-            </div>
-            <div class="input-group input-sm" style="margin-bottom: 10px">
-                <label class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></label>
-                <input type="password" class="form-control" name="password" placeholder="password">
-            </div>
-            <div class="form-actions">
-                <input type="submit" class="btn btn-block btn-primary btn-default" value="sign in">
-            </div>
+<body class="flex h-screen bg-gray-200">
+<div class="m-auto w-full max-w-xs">
+    <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <div class="mb-4">
+            <h1 class="block text-gray-700 text-sm font-bold mb-2">Login as:</h1>
+        </div>
+        <form action="login" method="post">
+            <input type="hidden" name="password" value="dummy">
+            <button type="submit" name="username" value="root" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mb-3 w-full">Root</button>
+            <button type="submit" name="username" value="admin" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mb-3 w-full">Admin</button>
+            <button type="submit" name="username" value="user" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full">User</button>
         </form>
     </div>
 </div>
