@@ -53,7 +53,7 @@ public class MenuTest {
         }
         // Compare expected results with actual results, if they do not match, the test fails
         if (!expectedPermissions.toString().equals(actualPermissions.toString())) {
-           throw new RuntimeException("测试结果与预期不匹配");
+           throw new RuntimeException("NOT MATCHED");
         }
     }
 
