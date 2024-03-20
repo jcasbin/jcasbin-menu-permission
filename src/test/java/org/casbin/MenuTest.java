@@ -27,13 +27,13 @@ public class MenuTest {
         );
 
         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(System.out));
-        //储存预期结果
+        // Store the expected results
         List<String> expectedPermissions = Arrays.asList("✅", "❌", "❌", "❌", "✅", "✅", "❌","✅", "✅","❌","✅","✅","❌","✅","❌","✅","✅","❌","✅","✅","❌","✅","❌","❌");
         List<String> actualPermissions = new ArrayList<>();
-        //读取权限进行测试
+        // Read permissions for testing
         for (String obj : perms) {
             try {
-                //按格式写测试结果
+                // Write test results in format
                 writer.write(obj + repeat(" ",30 - obj.length()));
                 for (String sub : new String[]{"ROLE_ROOT", "ROLE_ADMIN", "ROLE_USER"}) {
                     boolean ok = enforcer.enforce(sub, obj, "read");
@@ -51,7 +51,7 @@ public class MenuTest {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        //比较预期结果和实际结果，不符则测试不通过
+        // Compare expected results with actual results, if they do not match, the test fails
         if (!expectedPermissions.toString().equals(actualPermissions.toString())) {
            throw new RuntimeException("测试结果与预期不匹配");
         }
