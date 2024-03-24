@@ -17,7 +17,7 @@ public class MenuTest {
 
         assertFalse(enforcer.enforce("ROLE_ROOT", "UserMenu", "read"));
         assertTrue(enforcer.enforce("ROLE_ADMIN", "UserMenu", "read"));
-        assertTrue(enforcer.enforce("ROLE_USER", "UserMenu", "read"));
+        assertFalse(enforcer.enforce("ROLE_USER", "UserMenu", "read"));
 
         assertFalse(enforcer.enforce("ROLE_ROOT", "UserSubMenu_allow", "read"));
         assertTrue(enforcer.enforce("ROLE_ADMIN", "UserSubMenu_allow", "read"));
