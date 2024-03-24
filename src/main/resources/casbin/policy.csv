@@ -1,4 +1,4 @@
-p, ROLE_ROOT, OtherMenu, read, allow
+p, ROLE_ROOT, SystemMenu, read, allow
 p, ROLE_ROOT, AdminMenu, read, allow
 p, ROLE_ROOT, UserMenu, read, deny
 p, ROLE_ADMIN, UserMenu, read, allow
@@ -16,4 +16,4 @@ g2, UserSubMenu_deny, UserMenu
 g2, UserSubSubMenu, UserSubMenu_allow
 g2, AdminSubMenu_allow, AdminMenu
 g2, AdminSubMenu_deny, AdminMenu
-g2, (NULL), OtherMenu
+g2, (NULL), SystemMenu

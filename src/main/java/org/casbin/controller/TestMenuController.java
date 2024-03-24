@@ -53,9 +53,9 @@ public class TestMenuController {
         return "AdminMenu/AdminSubMenu_deny";
     }
 
-    @GetMapping(value = "menu/OtherMenu")
+    @GetMapping(value = "menu/SystemMenu")
     public String SystemMenu(){
-        return "OtherMenu/OtherMenu";
+        return "SystemMenu/SystemMenu";
     }
 
 }
